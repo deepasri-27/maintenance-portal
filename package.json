@@ -1,0 +1,19 @@
+{
+  "name": "maintenance-portal-dev-server",
+  "version": "1.0.0",
+  "description": "Development server with proxy for SAP API",
+  "main": "web/dev_server.js",
+  "scripts": {
+    "start": "node web/dev_server.js",
+    "build": "flutter build web",
+    "dev": "npm run build && npm start",
+    "serve": "flutter run -d chrome --web-port=3000"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+} 
