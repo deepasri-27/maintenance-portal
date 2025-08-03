@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maintenance_portal/core/constants/app_colors.dart';
 
 class NotificationResponse {
   final List<NotificationItem> results;
@@ -91,13 +92,13 @@ class NotificationItem {
   Color get priorityColor {
     switch (priok) {
       case '1':
-        return Colors.red;
+        return AppColors.error;
       case '2':
-        return Colors.orange;
+        return AppColors.warning;
       case '3':
-        return Colors.blue;
+        return AppColors.secondary;
       default:
-        return Colors.grey;
+        return AppColors.textLight;
     }
   }
 
@@ -114,4 +115,4 @@ class NotificationItem {
       return 'Invalid date';
     }
   }
-} 
+}

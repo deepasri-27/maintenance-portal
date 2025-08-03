@@ -8,7 +8,7 @@ ThemeData buildAppTheme() {
     onPrimary: Colors.white,
     secondary: AppColors.secondary,
     onSecondary: Colors.white,
-    surface: AppColors.background,
+    surface: AppColors.surface,
     onSurface: AppColors.textDark,
     error: AppColors.error,
     onError: Colors.white,
@@ -17,34 +17,39 @@ ThemeData buildAppTheme() {
   return ThemeData(
     useMaterial3: true,
     colorScheme: colorScheme,
-    scaffoldBackgroundColor: colorScheme.surface,
-    fontFamily: 'Roboto',
+    scaffoldBackgroundColor: AppColors.background,
+    fontFamily: 'Inter',
 
     // App Bar
     appBarTheme: AppBarTheme(
-      backgroundColor: colorScheme.primary,
+      backgroundColor: AppColors.primary,
       foregroundColor: Colors.white,
       elevation: 0,
-      centerTitle: true,
+      centerTitle: false,
       titleTextStyle: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
         color: Colors.white,
+        letterSpacing: -0.5,
       ),
+      iconTheme: const IconThemeData(color: Colors.white, size: 24),
     ),
 
     // Elevated Button
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: colorScheme.primary,
+        backgroundColor: AppColors.secondary,
         foregroundColor: Colors.white,
-        minimumSize: const Size.fromHeight(48),
+        minimumSize: const Size.fromHeight(56),
+        elevation: 0,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(16),
         ),
         textStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
+          letterSpacing: 0.5,
         ),
       ),
     ),
@@ -52,39 +57,53 @@ ThemeData buildAppTheme() {
     // Input Fields
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: colorScheme.surface,
+      fillColor: AppColors.surface,
       labelStyle: const TextStyle(
+        color: AppColors.textMedium,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
+      hintStyle: const TextStyle(
         color: AppColors.textLight,
-        fontSize: 14,
+        fontSize: 16,
       ),
       border: OutlineInputBorder(
-        borderSide: BorderSide.none,
-        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: AppColors.textLight.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: AppColors.textLight.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(16),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.primary),
-        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: AppColors.secondary, width: 2),
+        borderRadius: BorderRadius.circular(16),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     ),
 
-    // Snackbar
-    snackBarTheme: SnackBarThemeData(
-      backgroundColor: colorScheme.secondary,
-      behavior: SnackBarBehavior.floating,
-      contentTextStyle: const TextStyle(
-        color: Colors.white,
-        fontSize: 14,
+    // Card Theme
+    cardTheme: CardThemeData(
+      color: AppColors.cardBackground,
+      elevation: 0,
+      shadowColor: Colors.black.withOpacity(0.1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
       ),
     ),
 
     // Text Theme
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(fontSize: 16, color: AppColors.textDark),
-      bodyMedium: TextStyle(fontSize: 14, color: AppColors.textDark),
-      bodySmall: TextStyle(fontSize: 12, color: AppColors.textLight),
-      titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      headlineSmall: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+      displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, color: AppColors.textDark, letterSpacing: -1),
+      displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: AppColors.textDark, letterSpacing: -0.5),
+      headlineLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.textDark, letterSpacing: -0.5),
+      headlineMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.textDark),
+      titleLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textDark),
+      titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textDark),
+      bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: AppColors.textDark),
+      bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.textMedium),
+      bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: AppColors.textLight),
+      labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textDark),
     ),
   );
 }

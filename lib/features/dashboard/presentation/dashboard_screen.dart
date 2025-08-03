@@ -31,76 +31,312 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.background,
       drawer: const _AppDrawer(),
-      appBar: AppBar(
-        title: const Text('Maintenance Dashboard'),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
+      body: CustomScrollView(
+        slivers: [
+          // Modern App Bar
+          SliverAppBar(
+            expandedHeight: 120,
+            floating: false,
+            pinned: true,
+            backgroundColor: AppColors.primary,
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text(
+                'Dashboard',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                ),
+              ),
+              background: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.gradientStart, AppColors.gradientEnd],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+              ),
+            ),
+            leading: Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.menu_rounded, color: Colors.white),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined, color: Colors.white),
+                onPressed: () => Navigator.pushNamed(context, '/notifications'),
+              ),
+              const SizedBox(width: 8),
+            ],
+          ),
+          
+          // Dashboard Content
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Welcome Section
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.secondary.withOpacity(0.1),
+                          AppColors.accent.withOpacity(0.05),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: AppColors.secondary.withOpacity(0.2),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: AppColors.secondary,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: const Icon(
+                                Icons.waving_hand_rounded,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Good ${_getGreeting()}!",
+                                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                      color: AppColors.textDark,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "Ready to manage your maintenance tasks?",
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: AppColors.textMedium,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 32),
+                  
+                  // Quick Stats Section
+                  Text(
+                    "Quick Overview",
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: AppColors.textDark,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Stats Grid
+                  Consumer3<NotificationProvider, PlantProvider, WorkOrderProvider>(
+                    builder: (context, notificationProvider, plantProvider, workOrderProvider, child) {
+                      return Column(
+                        children: [
+                          // First Row
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _ModernDashboardCard(
+                                  title: "Notifications",
+                                  count: notificationProvider.totalCount,
+                                  icon: Icons.notifications_active_rounded,
+                                  color: AppColors.secondary,
+                                  onTap: () => Navigator.pushNamed(context, '/notifications'),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _ModernDashboardCard(
+                                  title: "High Priority",
+                                  count: notificationProvider.highPriorityCount,
+                                  icon: Icons.priority_high_rounded,
+                                  color: AppColors.error,
+                                  onTap: () => Navigator.pushNamed(context, '/notifications'),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          
+                          // Second Row
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _ModernDashboardCard(
+                                  title: "Plants",
+                                  count: plantProvider.totalCount,
+                                  icon: Icons.factory_rounded,
+                                  color: AppColors.success,
+                                  onTap: () => Navigator.pushNamed(context, '/plants'),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _ModernDashboardCard(
+                                  title: "Work Orders",
+                                  count: workOrderProvider.totalCount,
+                                  icon: Icons.assignment_rounded,
+                                  color: AppColors.warning,
+                                  onTap: () => Navigator.pushNamed(context, '/workorders'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  
+                  const SizedBox(height: 32),
+                  
+                  // Quick Actions Section
+                  Text(
+                    "Quick Actions",
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: AppColors.textDark,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Action Buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _QuickActionButton(
+                          title: "View Profile",
+                          icon: Icons.person_rounded,
+                          color: AppColors.accent,
+                          onTap: () => Navigator.pushNamed(context, '/profile'),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _QuickActionButton(
+                          title: "Refresh Data",
+                          icon: Icons.refresh_rounded,
+                          color: AppColors.secondary,
+                          onTap: () {
+                            context.read<NotificationProvider>().fetchNotifications();
+                            final loginProvider = context.read<LoginProvider>();
+                            final engineerId = loginProvider.user?.maintenanceEngineer ?? '00000001';
+                            context.read<PlantProvider>().fetchPlants(engineerId);
+                            context.read<WorkOrderProvider>().fetchWorkOrders('1009');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+    );
+  }
+
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Morning';
+    if (hour < 17) return 'Afternoon';
+    return 'Evening';
+  }
+}
+
+
+class _ModernDashboardCard extends StatelessWidget {
+  final String title;
+  final int count;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _ModernDashboardCard({
+    required this.title,
+    required this.count,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 20,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Welcome",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textDark,
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 24,
               ),
             ),
-            const SizedBox(height: 24),
-
-            // Grid of Dashboard Cards
-                    Consumer3<NotificationProvider, PlantProvider, WorkOrderProvider>(
-          builder: (context, notificationProvider, plantProvider, workOrderProvider, child) {
-                return LayoutBuilder(
-                  builder: (context, constraints) {
-                    final crossAxisCount = constraints.maxWidth < 600 ? 2 : 4;
-                    return GridView.count(
-                      shrinkWrap: true,
-                      crossAxisCount: crossAxisCount,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        _DashboardCard(
-                          label: "Total Notifications",
-                          count: notificationProvider.totalCount,
-                          icon: Icons.notifications,
-                          color: Colors.black87,
-                        ),
-                        _DashboardCard(
-                          label: "High Priority",
-                          count: notificationProvider.highPriorityCount,
-                          icon: Icons.priority_high,
-                          color: Colors.red,
-                        ),
-                        _DashboardCard(
-                          label: "Medium Priority",
-                          count: notificationProvider.mediumPriorityCount,
-                          icon: Icons.priority_high,
-                          color: Colors.orange,
-                        ),
-                                      _DashboardCard(
-                label: "Plants",
-                count: plantProvider.totalCount,
-                icon: Icons.factory,
-                color: Colors.green,
+            const SizedBox(height: 16),
+            Text(
+              "$count",
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                color: AppColors.textDark,
+                fontWeight: FontWeight.w800,
               ),
-              _DashboardCard(
-                label: "Work Orders",
-                count: workOrderProvider.totalCount,
-                icon: Icons.assignment,
-                color: Colors.orange,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.textMedium,
+                fontWeight: FontWeight.w500,
               ),
-                      ],
-                    );
-                  },
-                );
-              },
             ),
           ],
         ),
@@ -109,60 +345,57 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-
-class _DashboardCard extends StatelessWidget {
-  final String label;
-  final int count;
+class _QuickActionButton extends StatelessWidget {
+  final String title;
   final IconData icon;
   final Color color;
+  final VoidCallback onTap;
 
-  const _DashboardCard({
-    required this.label,
-    required this.count,
+  const _QuickActionButton({
+    required this.title,
     required this.icon,
     required this.color,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-            offset: Offset(2, 4),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: color.withOpacity(0.2),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            backgroundColor: color.withValues(alpha: 0.15),
-            child: Icon(icon, color: color),
-          ),
-          const Spacer(),
-          Text(
-            "$count",
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: color,
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                icon,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.textLight,
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: AppColors.textDark,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -191,7 +424,7 @@ class _AppDrawer extends StatelessWidget {
                     CircleAvatar(
                       radius: 28,
                       backgroundColor: Colors.white,
-                      child: Icon(Icons.build_circle, color: Colors.orange),
+                      child: Icon(Icons.build_circle, color: AppColors.accent),
                     ),
                     SizedBox(width: 16),
                     Text(
@@ -291,4 +524,3 @@ class _DrawerItem extends StatelessWidget {
     );
   }
 }
-

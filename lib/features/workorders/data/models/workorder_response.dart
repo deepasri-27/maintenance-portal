@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maintenance_portal/core/constants/app_colors.dart';
 
 class WorkOrderResponse {
   final List<WorkOrderItem> results;
@@ -83,11 +84,11 @@ class WorkOrderItem {
   Color get orderTypeColor {
     switch (auart) {
       case 'PM01':
-        return Colors.blue;
+        return AppColors.secondary;
       case 'PM02':
-        return Colors.orange;
+        return AppColors.warning;
       default:
-        return Colors.grey;
+        return AppColors.textLight;
     }
   }
 
@@ -105,11 +106,11 @@ class WorkOrderItem {
   Color get workCenterColor {
     switch (vaplz) {
       case 'INST_WC':
-        return Colors.green;
+        return AppColors.primary;
       case 'MECH_WR':
-        return Colors.purple;
+        return AppColors.accent;
       default:
-        return Colors.grey;
+        return AppColors.textLight;
     }
   }
-} 
+}
